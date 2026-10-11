@@ -1,0 +1,9 @@
+{
+  "description": "CI workflow file removed.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "Semantic check fails only if it still runs. A required status check is what blocks the merge when this job no longer reports."
+}

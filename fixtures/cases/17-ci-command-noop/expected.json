@@ -1,0 +1,9 @@
+{
+  "description": "Workflow still exists and no longer runs npm run lint.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "Config checksum misses a workflow edit."
+}

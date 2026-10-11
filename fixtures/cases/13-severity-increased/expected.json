@@ -1,0 +1,9 @@
+{
+  "description": "no-console raised from warn to error. The policy minimum is warn.",
+  "intent": "legitimate",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "Checksum flags a strengthening change. Semantic check allows it."
+}

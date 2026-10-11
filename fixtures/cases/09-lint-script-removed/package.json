@@ -1,0 +1,6 @@
+{
+  "name": "fixture",
+  "private": true,
+  "type": "module",
+  "scripts": {}
+}

@@ -1,0 +1,9 @@
+{
+  "description": "Required rule switched off.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "Severity off fails the approved minimum of error."
+}

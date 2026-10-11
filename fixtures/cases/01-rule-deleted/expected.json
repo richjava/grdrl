@@ -1,0 +1,9 @@
+{
+  "description": "Required rule removed from the flat config.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "External hash and semantic check both see the deleted rule."
+}

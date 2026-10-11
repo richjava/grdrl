@@ -1,0 +1,9 @@
+{
+  "description": "Local manifest drops every requirement and the workflow is deleted. ESLint config is unchanged.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "fail",
+  "note": "Only a check that loads grdrl.json from the base ref catches this. The config checksum stays quiet."
+}

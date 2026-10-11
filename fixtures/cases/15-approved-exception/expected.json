@@ -1,0 +1,9 @@
+{
+  "description": "Named suppression covered by an unexpired exception.",
+  "intent": "legitimate",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "The exception file is the allowlist. It is meant to be CODEOWNERS-protected."
+}

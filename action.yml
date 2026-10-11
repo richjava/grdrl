@@ -1,0 +1,21 @@
+name: grdrl
+description: Fail when required ESLint enforcement was weakened.
+inputs:
+  policy-ref:
+    description: Git ref that holds the approved grdrl.json. On pull requests, pass the base SHA.
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: grdrl check
+      shell: bash
+      env:
+        POLICY_REF: ${{ inputs.policy-ref }}
+      run: |
+        set -euo pipefail
+        if [ -n "$POLICY_REF" ]; then
+          npx --no-install grdrl check --policy-ref "$POLICY_REF"
+        else
+          npx --no-install grdrl check
+        fi

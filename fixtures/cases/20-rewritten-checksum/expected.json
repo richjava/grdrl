@@ -1,0 +1,10 @@
+{
+  "description": "Rule removed, local manifest updated, and the in-repo checksum rewritten to match.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "fail",
+  "rewriteStoredHash": true,
+  "note": "An in-repo checksum is updated by the same change, so it passes. External hash still flags. Local semantic check passes. Trusted policy fails."
+}

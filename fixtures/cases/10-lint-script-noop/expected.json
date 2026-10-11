@@ -1,0 +1,9 @@
+{
+  "description": "Lint script replaced with a command that does not run ESLint.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "The script name remains. It no longer invokes eslint."
+}

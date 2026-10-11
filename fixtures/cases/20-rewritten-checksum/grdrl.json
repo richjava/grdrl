@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "no-console",
+      "minSeverity": "warn",
+      "globs": ["src/**/*.ts"]
+    }
+  ],
+  "lint": {
+    "script": "lint",
+    "commandIncludes": "eslint"
+  },
+  "ci": {
+    "commandIncludes": ["npm run lint"]
+  }
+}

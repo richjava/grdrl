@@ -1,0 +1,9 @@
+{
+  "description": "@ts-ignore added in a nested source file.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "Config checksum misses the suppression."
+}

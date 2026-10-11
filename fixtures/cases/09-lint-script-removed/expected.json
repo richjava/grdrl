@@ -1,0 +1,9 @@
+{
+  "description": "package.json lint script removed.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "The flat config is intact. The lint command is gone."
+}

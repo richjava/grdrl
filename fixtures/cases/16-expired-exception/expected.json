@@ -1,0 +1,9 @@
+{
+  "description": "Suppression whose exception expiry is in the past.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "An expired exception does not cover the suppression."
+}

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "no-console",
+      "minSeverity": "error",
+      "globs": ["src/**/*.ts"]
+    }
+  ],
+  "lint": {
+    "script": "lint",
+    "commandIncludes": "eslint"
+  },
+  "ci": {
+    "commandIncludes": ["npm test", "grdrl check"]
+  },
+  "protectedPaths": [
+    "eslint.config.mjs",
+    "package.json",
+    "grdrl.json",
+    "grdrl.exceptions.json",
+    ".github/workflows/ci.yml"
+  ]
+}

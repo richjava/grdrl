@@ -1,0 +1,9 @@
+{
+  "description": "@ts-nocheck added at the top of a source file.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "TypeScript suppression does not touch the ESLint config."
+}

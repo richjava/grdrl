@@ -1,0 +1,9 @@
+{
+  "description": "no-restricted-imports stays error while its restricted path list is emptied.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "Known gap. v1 compares severity and file scope, not rule options."
+}

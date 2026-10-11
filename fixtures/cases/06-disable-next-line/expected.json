@@ -1,0 +1,9 @@
+{
+  "description": "eslint-disable-next-line for a named rule, with no exception.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "Config checksum misses an inline suppression."
+}

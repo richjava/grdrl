@@ -1,0 +1,9 @@
+{
+  "description": "Comment-only edit to eslint.config.mjs.",
+  "intent": "legitimate",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "Checksum false positive. Effective rules are unchanged."
+}

@@ -1,0 +1,9 @@
+{
+  "description": "Required rule deleted from the config and from the local manifest.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "pass",
+  "trustedPolicy": "fail",
+  "note": "A check that trusts the working tree manifest passes. A check against the base-branch policy fails."
+}

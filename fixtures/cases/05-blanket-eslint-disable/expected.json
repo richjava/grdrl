@@ -1,0 +1,9 @@
+{
+  "description": "Blanket eslint-disable added in a source file.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "eslint.config.mjs is unchanged, so a config checksum misses it."
+}

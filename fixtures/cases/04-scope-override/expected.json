@@ -1,0 +1,9 @@
+{
+  "description": "Rule remains error globally and is turned off for src/app/**.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "Effective config for src/app/page.ts is off. A name-only scan of the config can miss this."
+}

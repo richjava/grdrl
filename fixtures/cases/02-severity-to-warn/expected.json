@@ -1,0 +1,9 @@
+{
+  "description": "Required rule lowered from error to warn.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "A checksum sees a change. Semantic check explains the severity drop."
+}

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "node hooks/protect.mjs",
+        "matcher": "Write|Edit|StrReplace|Delete"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "node hooks/protect.mjs"
+      }
+    ]
+  }
+}
