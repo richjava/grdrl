@@ -4,7 +4,14 @@
 
 grdrl, short for "Guardrail", keeps required lint rules in force when a coding agent would rather silence or weaken them. 
 
-**The problem:** Faced with a lint error, an agent will often weaken it instead of fixing the code: a disable comment, a rule dropped from `error` to `warn`, or a lint script replaced so the command still exits 0. The same agent can edit `eslint.config.mjs`, so the check that should have caught that change is gone too.
+**The problem:** Faced with a lint error, an agent will often silence or weaken the check instead of fixing the code. The same agent can edit `eslint.config.mjs`, so the check that should have caught that change is gone too.
+
+- An `eslint-disable` comment with no exception
+- An `@ts-ignore` comment with no exception
+- A rule lowered from `error` to `warn`
+- A rule turned off for one file
+- A lint script that no longer runs ESLint
+- A workflow that no longer runs the grdrl command
 
 **What grdrl does:** You list the rules that must stay in force in `grdrl.json`. With the hook installed, it blocks a disable comment or an edit to the ESLint config during the task, and tells the agent to fix the source. In CI, `grdrl check --policy-ref` loads that list from the pull request's base commit and fails if the branch weakened those rules, added a suppression, or removed the lint or CI command. Editing `grdrl.json` on the same branch leaves that check failed. The agent can still change the code, and a person reviews any change to the policy.
 
