@@ -2,13 +2,13 @@
 
 # grdrl
 
-grdrl, short for "Guardrail", keeps required lint rules in force when a coding agent would rather silence them. 
+grdrl, short for "Guardrail", keeps required lint rules in force when a coding agent would rather silence or weaken them. 
 
-**The problem:** Faced with a lint error, an agent will often silence it instead of fixing the code: a disable comment, a rule dropped from `error` to `warn`, or a lint script replaced so the command still exits 0. The same agent can edit `eslint.config.mjs`, so the check that should have caught that change is gone too.
+**The problem:** Faced with a lint error, an agent will often weaken it instead of fixing the code: a disable comment, a rule dropped from `error` to `warn`, or a lint script replaced so the command still exits 0. The same agent can edit `eslint.config.mjs`, so the check that should have caught that change is gone too.
 
-**What grdrl does:** You write the rules that must stay in force into `grdrl.json`. During the task, a hook blocks the obvious disable comment and the obvious config edit, and tells the agent to fix the source. On a pull request, `grdrl check` loads that list from the base branch and fails if the branch made any of those rules weaker. The agent can still change the code, and it can still propose a policy change. A person reviews that change. The agent does not approve it by editing the list in the same branch.
+**What grdrl does:** You list the rules that must stay in force in `grdrl.json`. With the hook installed, it blocks a disable comment or an edit to the ESLint config during the task, and tells the agent to fix the source. In CI, `grdrl check --policy-ref` loads that list from the pull request's base commit and fails if the branch weakened those rules, added a suppression, or removed the lint or CI command. Editing `grdrl.json` on the same branch leaves that check failed. The agent can still change the code, and a person reviews any change to the policy.
 
-For a rule the agent must not soften, set `"minSeverity": "error"`. That is the strictest floor grdrl can require. `warn` in ESLint then fails the check. If `no-console` is only `warn` in today's config and you need it to stay an error, write `"error"` anyway. Copying today's config would lock `warn` in as the standard.
+For a rule the agent must not soften, set `"minSeverity": "error"`. That is the strictest floor grdrl can require. `warn` in ESLint then fails the check.
 
 ```json
 {
@@ -32,7 +32,7 @@ For a rule the agent must not soften, set `"minSeverity": "error"`. That is the 
 
 `minSeverity` is the weakest level you will accept. `"warn"` still passes when the rule is `error`. `"error"` fails when the rule has been lowered to `warn` or turned off. The project needs an ESLint flat config, `eslint.config.js` or `eslint.config.mjs`. If grdrl cannot read that file, the check fails.
 
-Narrow exceptions live in `grdrl.exceptions.json`, with a rule, a file, a reason, and an expiry. A blanket `eslint-disable` needs `"ruleId": "*"`. grdrl treats that file as allowed. On a shared repository, a person has to approve edits to `grdrl.exceptions.json`, `grdrl.json`, the ESLint config, and the CI config before those edits can merge. GitHub and GitLab name those people in a CODEOWNERS file. Bitbucket uses default reviewers. Working alone, you review those files yourself. The shape of an exception is in the [reference](docs/reference.md).
+`grdrl.exceptions.json` is the allow-list for a suppression you intend to keep. Each entry names one rule, one file, a reason, and a date it expires. Until that date, a disable comment in that file for that rule passes the check. A comment that disables every rule needs `"ruleId": "*"`. grdrl trusts this file, so on a shared repository a person has to approve edits to it, and to `grdrl.json`, the ESLint config, and the CI config, before those edits can merge. GitHub and GitLab name those people in a CODEOWNERS file. Bitbucket uses default reviewers. Working alone, you review those files yourself. The shape of an entry is in the [reference](docs/reference.md).
 
 ## What it flags
 
