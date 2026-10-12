@@ -2,6 +2,11 @@
   "name": "grdrl",
   "version": "0.1.0",
   "description": "Detect when required ESLint enforcement has been weakened.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richjava/grdrl.git"
+  },
   "type": "module",
   "bin": {
     "grdrl": "./dist/cli.js"
