@@ -5,5 +5,5 @@
   "storedHash": "flag",
   "semantic": "pass",
   "trustedPolicy": "pass",
-  "note": "Known gap. v1 compares severity and file scope, not rule options."
+  "note": "The policy does not record options, so emptying the path list is not flagged."
 }

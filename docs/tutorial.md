@@ -9,7 +9,7 @@ You need Node.js 20 or newer, and a `package.json` whose `lint` script runs ESLi
 From the project root:
 
 ```bash
-npm install --save-dev grdrl
+npm install --save-dev @richjava/grdrl
 ```
 
 ## Name one rule you want kept

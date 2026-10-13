@@ -36,7 +36,8 @@ grdrl check [--cwd dir] [--policy file] [--policy-ref git-ref] [--changed-since 
     {
       "id": "no-restricted-imports",
       "minSeverity": "error",
-      "globs": ["src/**/*.ts"]
+      "globs": ["src/**/*.ts"],
+      "options": [{ "paths": ["bad-package"] }]
     }
   ],
   "lint": {
@@ -51,15 +52,15 @@ grdrl check [--cwd dir] [--policy file] [--policy-ref git-ref] [--changed-since 
 
 `minSeverity` is `warn` or `error`. The effective ESLint severity must be at least that high for every source file matching the globs. `error` satisfies a minimum of `warn`.
 
-`lint.script` is a `package.json` script name. Its command must contain `commandIncludes`.
+`options`, when present, is the argument list after the severity. Those arguments must match for every source file the globs cover. Object key order does not matter. Array order does. A rule without `options` compares severity only. `grdrl init` does not copy options.
 
-`ci.commandIncludes` is a list of strings. Some CI file must contain each string. With no `ci.files` list, grdrl reads `.github/workflows/**/*.yml`, `.github/workflows/**/*.yaml`, `.gitlab-ci.yml`, and `bitbucket-pipelines.yml`. `ci.files` replaces that list with globs you name. Included files that those configs pull in are not followed unless a glob matches them.
+`lint.script` is a `package.json` script name. The script must run `commandIncludes` as a command, such as `eslint .` or `npx eslint`. A path whose filename is that command counts. Mentioning the command inside `echo` does not.
+
+`ci.commandIncludes` is a list of strings. Some CI file must contain each string. The check looks for that text and does not prove the step runs. With no `ci.files` list, grdrl reads `.github/workflows/**/*.yml`, `.github/workflows/**/*.yaml`, `.gitlab-ci.yml`, and `bitbucket-pipelines.yml`. `ci.files` replaces that list with globs you name. Included files that those configs pull in are not followed unless a glob matches them.
 
 `protectedPaths` is accepted and stored. `grdrl check` does not read it. The hook uses its own fixed list of filenames.
 
 v1 resolves ESLint flat config only. When the config cannot be resolved, each required rule fails with kind `config-unresolved`.
-
-Rule options are compared for severity only. A rule can stay at `error` while its options are emptied. That change is outside this check.
 
 ## Exceptions
 
@@ -85,9 +86,10 @@ Rule options are compared for severity only. A rule can stay at `error` while it
 | `rule-missing` | The rule is off for every matched file. |
 | `rule-weakened` | The rule is present and below the minimum for every matched file. |
 | `scope-narrowed` | Some matched files meet the minimum and some do not. |
+| `options-changed` | A rule recorded `options`, and the effective ESLint options for a file differ. |
 | `suppression` | `eslint-disable`, `eslint-disable-next-line`, `eslint-disable-line`, `@ts-ignore`, or `@ts-nocheck` without an exception. |
-| `lint-script` | The lint script is missing or does not include the required command. |
-| `ci-workflow` | No CI config contains a required command. |
+| `lint-script` | The lint script is missing or does not run the required command. |
+| `ci-workflow` | No CI config contains a required command string. Text inside the file is enough. |
 | `config-unresolved` | Flat config could not be resolved, or no source file matched the globs. |
 | `exceptions-invalid` | `grdrl.exceptions.json` could not be parsed. |
 

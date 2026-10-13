@@ -1,0 +1,9 @@
+{
+  "description": "The workflow's only copy of the CI command is a YAML comment.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "Same limit as a command that only appears inside echo. if, continue-on-error, and a job that does not run on pull requests are the same class."
+}

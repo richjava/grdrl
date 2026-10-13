@@ -1,0 +1,9 @@
+{
+  "description": "Recorded no-restricted-imports options match the effective config.",
+  "intent": "legitimate",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "The options array matches the paths ESLint applies. Both checks pass."
+}

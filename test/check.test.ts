@@ -48,6 +48,30 @@ describe("check", () => {
       rmSync(removed, { recursive: true, force: true });
     }
   });
+
+  it("checks a matched mts file when the rule is off", async () => {
+    const cwd = mkdtempSync(path.join(tmpdir(), "grdrl-mts-"));
+    try {
+      mkdirSync(path.join(cwd, "src"));
+      writeFileSync(path.join(cwd, "src", "index.mts"), "export const ready = true;\n");
+      writeFileSync(
+        path.join(cwd, "eslint.config.mjs"),
+        'export default [{ files: ["**/*.mts"], rules: { "no-console": "off" } }];\n',
+      );
+      const result = await checkProject({
+        cwd,
+        policy: {
+          version: 1,
+          rules: [{ id: "no-console", minSeverity: "error", globs: ["src/**/*.mts"] }],
+        },
+        today: "2026-10-10",
+      });
+      assert.equal(result.status, "failed");
+      assert.ok(result.violations.some((violation) => violation.kind === "rule-missing" && violation.file === "src/index.mts"));
+    } finally {
+      rmSync(cwd, { recursive: true, force: true });
+    }
+  });
 });
 
 describe("cli", () => {

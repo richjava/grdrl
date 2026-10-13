@@ -8,8 +8,8 @@ import { evaluateCase, listCaseIds } from "../scripts/corpus.js";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("bypass corpus", () => {
-  it("covers 20 cases", () => {
-    assert.equal(listCaseIds().length, 20);
+  it("covers 27 cases", () => {
+    assert.equal(listCaseIds().length, 27);
   });
 
   it("records the measured results in docs/bypass-coverage.md", () => {

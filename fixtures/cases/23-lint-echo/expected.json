@@ -1,0 +1,9 @@
+{
+  "description": "The lint script mentions eslint only as the argument of echo.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "The command token is echo, so the lint check fails."
+}

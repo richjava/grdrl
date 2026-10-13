@@ -1,0 +1,9 @@
+{
+  "description": "no-restricted-imports stays error while its recorded path list is emptied.",
+  "intent": "bypass",
+  "configHash": "flag",
+  "storedHash": "flag",
+  "semantic": "fail",
+  "trustedPolicy": "fail",
+  "note": "The case policy and the base policy both record options, so both checks fail."
+}

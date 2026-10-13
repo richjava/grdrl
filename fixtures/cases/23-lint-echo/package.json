@@ -1,0 +1,8 @@
+{
+  "name": "fixture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "echo eslint"
+  }
+}

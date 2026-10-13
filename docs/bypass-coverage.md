@@ -26,6 +26,13 @@ Config hash is the SHA-256 of `eslint.config.mjs` compared with the baseline fil
 | 18-local-policy-gutted | bypass | pass | pass | pass | fail |
 | 19-options-emptied | bypass | flag | flag | pass | pass |
 | 20-rewritten-checksum | bypass | flag | pass | pass | fail |
+| 21-options-locked-emptied | bypass | flag | flag | fail | fail |
+| 22-options-locked-match | legitimate | pass | pass | pass | pass |
+| 23-lint-echo | bypass | pass | pass | fail | fail |
+| 24-ci-echo | bypass | pass | pass | pass | pass |
+| 25-wildcard-exception | bypass | pass | pass | pass | pass |
+| 26-source-outside-glob | bypass | pass | pass | pass | pass |
+| 27-ci-command-commented | bypass | pass | pass | pass | pass |
 
 ## Notes
 
@@ -47,7 +54,14 @@ Config hash is the SHA-256 of `eslint.config.mjs` compared with the baseline fil
 - **16-expired-exception** (bypass): Suppression whose exception expiry is in the past. An expired exception does not cover the suppression.
 - **17-ci-command-noop** (bypass): Workflow still exists and no longer runs npm run lint. Config checksum misses a workflow edit.
 - **18-local-policy-gutted** (bypass): Local manifest drops every requirement and the workflow is deleted. ESLint config is unchanged. Only a check that loads grdrl.json from the base ref catches this. The config checksum stays quiet.
-- **19-options-emptied** (bypass): no-restricted-imports stays error while its restricted path list is emptied. Known gap. v1 compares severity and file scope, not rule options.
+- **19-options-emptied** (bypass): no-restricted-imports stays error while its restricted path list is emptied. The policy does not record options, so emptying the path list is not flagged.
 - **20-rewritten-checksum** (bypass): Rule removed, local manifest updated, and the in-repo checksum rewritten to match. An in-repo checksum is updated by the same change, so it passes. External hash still flags. Local semantic check passes. Trusted policy fails.
+- **21-options-locked-emptied** (bypass): no-restricted-imports stays error while its recorded path list is emptied. The case policy and the base policy both record options, so both checks fail.
+- **22-options-locked-match** (legitimate): Recorded no-restricted-imports options match the effective config. The options array matches the paths ESLint applies. Both checks pass.
+- **23-lint-echo** (bypass): The lint script mentions eslint only as the argument of echo. The command token is echo, so the lint check fails.
+- **24-ci-echo** (bypass): The workflow mentions the CI command only inside echo. Tripwire. The CI check looks for the command text and still passes.
+- **25-wildcard-exception** (bypass): A blanket exception covers a disable comment in the working tree. The checker trusts grdrl.exceptions.json. Review of that file is the control.
+- **26-source-outside-glob** (bypass): Source under lib is outside the policy globs, which still cover src. The globs are the boundary. Authors have to name every root that matters.
+- **27-ci-command-commented** (bypass): The workflow's only copy of the CI command is a YAML comment. Same limit as a command that only appears inside echo. if, continue-on-error, and a job that does not run on pull requests are the same class.
 
 A removed workflow is a semantic failure when this checker still runs. If the pull request deletes the job and nothing reports the required status check, merge protection is the control that blocks it.

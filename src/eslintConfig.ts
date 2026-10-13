@@ -1,7 +1,7 @@
 import path from "node:path";
 import { ESLint } from "eslint";
 import { relativePosix, SOURCE_EXTENSIONS, walkFiles } from "./files.js";
-import { severityRank } from "./severity.js";
+import { ruleOptions, severityRank } from "./severity.js";
 
 export type ProjectFile = {
   relativePath: string;
@@ -13,8 +13,13 @@ export type ProjectRules =
   | { ok: true; files: ProjectFile[] }
   | { ok: false; message: string };
 
+export type EffectiveRule = {
+  severity: number;
+  options: unknown[];
+};
+
 export type EffectiveRules =
-  | { ok: true; byFile: Map<string, number> }
+  | { ok: true; byFile: Map<string, EffectiveRule> }
   | { ok: false; message: string };
 
 export async function effectiveRuleSeverity(
@@ -33,17 +38,18 @@ export async function effectiveRuleSeverity(
     return { ok: false, message: errorMessage(error) };
   }
 
-  const byFile = new Map<string, number>();
+  const byFile = new Map<string, EffectiveRule>();
   for (const file of files) {
     const absolute = path.resolve(cwd, file);
     try {
       if (await eslint.isPathIgnored(absolute)) {
-        byFile.set(file, 0);
+        byFile.set(file, { severity: 0, options: [] });
         continue;
       }
       const config = await eslint.calculateConfigForFile(absolute);
       const rules = config && typeof config === "object" ? (config as { rules?: Record<string, unknown> }).rules : undefined;
-      byFile.set(file, severityRank(rules?.[ruleId]));
+      const configured = rules?.[ruleId];
+      byFile.set(file, { severity: severityRank(configured), options: ruleOptions(configured) });
     } catch (error) {
       return { ok: false, message: errorMessage(error) };
     }

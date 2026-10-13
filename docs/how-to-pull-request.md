@@ -23,6 +23,8 @@ The package has to be installed before the action runs. `fetch-depth: 0` makes t
 
 `action.yml` runs `npx --no-install grdrl check`. On a push to the default branch there is no base SHA. Run `npx grdrl check` against the working tree for that event.
 
+The SHA comes from the host event. A pull request must not choose it. Do not pass the head ref, and do not read the ref from a file on the branch. A person running the check on their own machine can still pass `origin/main`.
+
 This repository's own workflow builds the CLI and calls `node dist/cli.js check`, because the package being tested is the repository itself. A project that depends on grdrl uses the action above.
 
 ### Require the GitHub check

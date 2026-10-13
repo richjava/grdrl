@@ -1,0 +1,9 @@
+{
+  "description": "Source under lib is outside the policy globs, which still cover src.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "The globs are the boundary. Authors have to name every root that matters."
+}

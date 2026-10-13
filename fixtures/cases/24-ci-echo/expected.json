@@ -1,0 +1,9 @@
+{
+  "description": "The workflow mentions the CI command only inside echo.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "Tripwire. The CI check looks for the command text and still passes."
+}

@@ -2,7 +2,7 @@ import { readdirSync } from "node:fs";
 import path from "node:path";
 import { minimatch } from "minimatch";
 
-export const SOURCE_EXTENSIONS = new Set([".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"]);
+export const SOURCE_EXTENSIONS = new Set([".js", ".jsx", ".ts", ".tsx", ".mts", ".cts", ".mjs", ".cjs"]);
 
 const SKIP_DIRECTORIES = new Set([
   "node_modules",

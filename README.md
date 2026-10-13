@@ -43,18 +43,19 @@ For a rule the agent must not soften, set `"minSeverity": "error"`. That is the 
 ## What it flags
 
 - A required rule missing, lowered below its minimum severity, or turned off for a file inside its globs.
+- Recorded rule options that differ from the options ESLint applies.
 - `eslint-disable`, `eslint-disable-next-line`, `eslint-disable-line`, `@ts-ignore`, and `@ts-nocheck` without an exception.
-- A lint script that no longer includes the configured command.
-- A CI config that no longer includes each configured CI command.
+- A lint script that does not run the configured command.
+- A CI file that no longer contains each configured command.
 
-Strengthening a rule is allowed. v1 does not compare rule options, so emptying `no-restricted-imports` paths while leaving the severity at `error` is not flagged.
+Strengthening a rule is allowed. Options are compared only when a rule records an `options` array. The [explanation](docs/explanation.md) covers why that array is optional, and what the lint and CI checks do not prove.
 
 Text and JSON both list the rule, file, and what changed. They do not guess intent.
 
 ## Run it
 
 ```bash
-npm install --save-dev grdrl
+npm install --save-dev @richjava/grdrl
 npx grdrl init
 npx grdrl check
 npx grdrl check --format json
@@ -101,7 +102,7 @@ The hook can be skipped, and a pull request can replace the pipeline with a no-o
 
 The hook files and the CI setup for GitHub, GitLab, and Bitbucket are written out in the how-to guides below.
 
-[docs/bypass-coverage.md](docs/bypass-coverage.md) records 20 cases: what a config hash catches, what an in-repo checksum misses once it is rewritten, what the semantic check catches, and what only the base-branch policy catches. `npm test` runs that corpus.
+[docs/bypass-coverage.md](docs/bypass-coverage.md) records 27 cases: what a config hash catches, what an in-repo checksum misses once it is rewritten, what the semantic check catches, and what only the base-branch policy catches. `npm test` runs that corpus.
 
 ## Go further
 
@@ -111,4 +112,4 @@ The hook files and the CI setup for GitHub, GitLab, and Bitbucket are written ou
 | Keep a coding agent inside the policy, including the repair loop | [How to use it with an agent](docs/how-to-agent.md) |
 | Fail a pull request when enforcement was weakened | [How to fail a pull request](docs/how-to-pull-request.md) |
 | Look up flags, exceptions, or exit codes | [Reference](docs/reference.md) |
-| Understand why the base branch holds the policy | [Explanation](docs/explanation.md) |
+| Understand why the check is shaped this way | [Explanation](docs/explanation.md) |

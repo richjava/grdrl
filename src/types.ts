@@ -4,6 +4,7 @@ export type RequiredRule = {
   id: string;
   minSeverity: "warn" | "error";
   globs: string[];
+  options?: unknown[];
 };
 
 export type Policy = {
@@ -31,6 +32,7 @@ export type ViolationKind =
   | "rule-missing"
   | "rule-weakened"
   | "scope-narrowed"
+  | "options-changed"
   | "suppression"
   | "lint-script"
   | "ci-workflow"

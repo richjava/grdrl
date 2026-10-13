@@ -4,7 +4,7 @@ import { lintScriptViolations, ciViolations, DEFAULT_CI_GLOBS, readCiFiles } fro
 import { effectiveRuleSeverity } from "./eslintConfig.js";
 import { exceptionCovers, todayUtc } from "./exceptions.js";
 import { matchesAnyGlob, relativePosix, SOURCE_EXTENSIONS, walkFiles } from "./files.js";
-import { minimumRank, severityName } from "./severity.js";
+import { minimumRank, sameOptions, severityName } from "./severity.js";
 import { findSuppressions } from "./suppressions.js";
 import type { CheckOptions, CheckResult, Violation } from "./types.js";
 
@@ -41,10 +41,10 @@ export async function checkProject(options: CheckOptions): Promise<CheckResult> 
     }
 
     const required = minimumRank(rule.minSeverity);
-    const weak = matched.filter((file) => (effective.byFile.get(file) ?? 0) < required);
+    const weak = matched.filter((file) => (effective.byFile.get(file)?.severity ?? 0) < required);
     const strong = matched.length - weak.length;
     for (const file of weak) {
-      const actual = severityName(effective.byFile.get(file) ?? 0);
+      const actual = severityName(effective.byFile.get(file)?.severity ?? 0);
       const kind = strong > 0 ? "scope-narrowed" : actual === "off" ? "rule-missing" : "rule-weakened";
       violations.push({
         ruleId: rule.id,
@@ -53,6 +53,20 @@ export async function checkProject(options: CheckOptions): Promise<CheckResult> 
         severity: "error",
         kind,
       });
+    }
+    if (rule.options !== undefined) {
+      for (const file of matched) {
+        const actualOptions = effective.byFile.get(file)?.options ?? [];
+        if (!sameOptions(actualOptions, rule.options)) {
+          violations.push({
+            ruleId: rule.id,
+            file,
+            message: `${rule.id} options for ${file} do not match the approved options.`,
+            severity: "error",
+            kind: "options-changed",
+          });
+        }
+      }
     }
   }
 

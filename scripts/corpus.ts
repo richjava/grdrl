@@ -1,4 +1,4 @@
-import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, unlinkSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, unlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkProject } from "../src/check.js";
@@ -81,9 +81,10 @@ export async function evaluateCase(caseId: string): Promise<CaseResult> {
       exceptions,
       today: corpusToday,
     });
+    const trustedPath = path.join(casesDir, caseId, "base-policy.json");
     const trusted = await checkProject({
       cwd: dest,
-      policy: loadPolicyFile(path.join(baselineDir, "grdrl.json")),
+      policy: loadPolicyFile(existsSync(trustedPath) ? trustedPath : path.join(baselineDir, "grdrl.json")),
       exceptions,
       today: corpusToday,
     });
@@ -134,12 +135,33 @@ export function renderCoverage(results: readonly CaseResult[]): string {
   return lines.join("\n");
 }
 
+function copyFile(from: string, dest: string): void {
+  mkdirSync(path.dirname(dest), { recursive: true });
+  cpSync(from, dest);
+}
+
 function copyOverlay(caseDir: string, current: string, destRoot: string): void {
   for (const entry of readdirSync(current, { withFileTypes: true })) {
-    if (entry.name === "expected.json" || entry.name === "delete.txt") {
+    if (entry.name === "expected.json" || entry.name === "delete.txt" || entry.name === "base-policy.json") {
       continue;
     }
     const from = path.join(current, entry.name);
+    if (entry.isFile() && entry.name === "policy.json") {
+      copyFile(from, path.join(destRoot, "grdrl.json"));
+      continue;
+    }
+    if (entry.isFile() && entry.name === "flat-config.mjs") {
+      copyFile(from, path.join(destRoot, "eslint.config.mjs"));
+      continue;
+    }
+    if (entry.isFile() && entry.name === "workflow.yml") {
+      copyFile(from, path.join(destRoot, ".github", "workflows", "ci.yml"));
+      continue;
+    }
+    if (entry.isFile() && entry.name === "exceptions.json") {
+      copyFile(from, path.join(destRoot, "grdrl.exceptions.json"));
+      continue;
+    }
     const relative = path.relative(caseDir, from);
     const dest = path.join(destRoot, relative);
     if (entry.isDirectory()) {

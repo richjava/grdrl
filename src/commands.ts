@@ -16,6 +16,60 @@ export type CiScan = {
   globs: readonly string[];
 };
 
+const RUNNERS = new Set(["npx", "npm", "yarn", "pnpm", "node"]);
+
+export function scriptRunsCommand(script: string, needle: string): boolean {
+  const segments = script.split(/&&|\|\||[;\n|]/);
+  return segments.some((segment) => segmentInvokes(shellTokens(segment), needle));
+}
+
+function shellTokens(segment: string): string[] {
+  const tokens: string[] = [];
+  const pattern = /"([^"]*)"|'([^']*)'|(\S+)/g;
+  for (const match of segment.matchAll(pattern)) {
+    tokens.push(match[1] ?? match[2] ?? match[3] ?? "");
+  }
+  return tokens;
+}
+
+function segmentInvokes(tokens: string[], needle: string): boolean {
+  let index = 0;
+  while (index < tokens.length && /^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[index] ?? "")) {
+    index += 1;
+  }
+  if (index >= tokens.length) {
+    return false;
+  }
+  const relevant = tokens.slice(index);
+  const base = commandBasename(relevant[0] ?? "");
+  if (RUNNERS.has(base)) {
+    const args = relevant.slice(1).filter((token) => !token.startsWith("-"));
+    if (args.some((token) => tokenMatches(token, needle))) {
+      return true;
+    }
+    const tail = args.join(" ");
+    return tail === needle || tail.startsWith(`${needle} `);
+  }
+  if (tokenMatches(relevant[0] ?? "", needle)) {
+    return true;
+  }
+  const joined = relevant.join(" ");
+  return joined === needle || joined.startsWith(`${needle} `);
+}
+
+function tokenMatches(token: string, needle: string): boolean {
+  const normalized = token.replaceAll("\\", "/");
+  const base = commandBasename(normalized);
+  const stem = base.replace(/\.(?:js|mjs|cjs)$/, "");
+  return normalized === needle || base === needle || stem === needle;
+}
+
+function commandBasename(token: string): string {
+  const normalized = token.replaceAll("\\", "/");
+  const slash = normalized.lastIndexOf("/");
+  return slash === -1 ? normalized : normalized.slice(slash + 1);
+}
+
 export function lintScriptViolations(
   cwd: string,
   lint: { script: string; commandIncludes: string },
@@ -46,12 +100,12 @@ export function lintScriptViolations(
       ? (scripts as Record<string, unknown>)[lint.script]
       : undefined;
 
-  if (typeof command !== "string" || !command.includes(lint.commandIncludes)) {
+  if (typeof command !== "string" || !scriptRunsCommand(command, lint.commandIncludes)) {
     return [
       {
         ruleId: "lint.script",
         file,
-        message: `Script "${lint.script}" must include "${lint.commandIncludes}".`,
+        message: `Script "${lint.script}" must run "${lint.commandIncludes}" as a command.`,
         severity: "error",
         kind: "lint-script",
       },

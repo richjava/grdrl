@@ -1,0 +1,9 @@
+{
+  "description": "A blanket exception covers a disable comment in the working tree.",
+  "intent": "bypass",
+  "configHash": "pass",
+  "storedHash": "pass",
+  "semantic": "pass",
+  "trustedPolicy": "pass",
+  "note": "The checker trusts grdrl.exceptions.json. Review of that file is the control."
+}

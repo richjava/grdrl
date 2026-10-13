@@ -117,10 +117,14 @@ function parseRule(value: unknown, index: number): RequiredRule {
   if (!Array.isArray(record.globs) || record.globs.length === 0 || record.globs.some((glob) => typeof glob !== "string" || glob === "")) {
     throw new PolicyError(`Rule ${record.id} needs at least one glob.`);
   }
+  if (record.options !== undefined && !Array.isArray(record.options)) {
+    throw new PolicyError(`Rule ${record.id} options must be an array.`);
+  }
   return {
     id: record.id,
     minSeverity: record.minSeverity,
     globs: record.globs,
+    ...(record.options !== undefined ? { options: record.options } : {}),
   };
 }
 
